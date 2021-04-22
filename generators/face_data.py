@@ -65,7 +65,7 @@ class FaceGenerator(Generator):
         images_list, labels_list, images_orientation, self._subjects = read_data_file(file_path, images_relative_path)
         data_list = list(zip(images_list, labels_list, images_orientation))
         random.shuffle(data_list)
-        self.data_list = data_list
+        self.data_list = data_list[:10]
         super(FaceGenerator, self).__init__(**kwargs)
 
     def size(self):
@@ -117,17 +117,20 @@ class FaceGenerator(Generator):
         Load an image at the image_index.
         """
         image = load_image(self.data_list[image_index][0],self.data_list[image_index][2])[0]
-        return image
+        return np.stack([image,image,image], axis=2)
 
     def load_annotations(self, image_index):
         """
         Load annotations for an image_index.
         """
         label = self.data_list[image_index][1]
-
-        class_labels = label[:,-1].flatten()
-        bboxes = label[:,:-1]
-        annotations = {'lables': class_labels, 'bboxes':bboxes}
+        if len(label) > 0:
+            class_labels = label[:,-1].flatten()
+            bboxes = label[:,:-1]
+        else:
+            class_labels = np.empty((0,), dtype=np.int32)
+            bboxes = np.empty((0, 4))
+        annotations = {'labels': class_labels, 'bboxes':bboxes}
         return annotations
 
 
