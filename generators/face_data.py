@@ -65,7 +65,7 @@ class FaceGenerator(Generator):
         images_list, labels_list, images_orientation, self._subjects = read_data_file(file_path, images_relative_path)
         data_list = list(zip(images_list, labels_list, images_orientation))
         random.shuffle(data_list)
-        self.data_list = data_list[:100]
+        self.data_list = data_list
         super(FaceGenerator, self).__init__(**kwargs)
 
     def size(self):

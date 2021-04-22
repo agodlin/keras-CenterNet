@@ -197,6 +197,25 @@ def create_generators(args):
             shuffle_groups=False,
             **common_args
         )
+    if args.dataset_type == 'face':
+        from generators.face_data import FaceGenerator
+        train_generator = FaceGenerator(
+            args.train_list,
+            args.images_relative_path,
+            skip_difficult=True,
+            multi_scale=args.multi_scale,
+            misc_effect=misc_effect,
+            visual_effect=visual_effect,
+            **common_args
+        )
+
+        validation_generator = FaceGenerator(
+            args.val_list,
+            args.images_relative_path,
+            skip_difficult=True,
+            shuffle_groups=False,
+            **common_args
+        )
     else:
         raise ValueError('Invalid data type received: {}'.format(args.dataset_type))
 
@@ -241,6 +260,11 @@ def parse_args(args):
     parser = argparse.ArgumentParser(description='Simple training script for training a RetinaNet network.')
     subparsers = parser.add_subparsers(help='Arguments for specific dataset types.', dest='dataset_type')
     subparsers.required = True
+
+    face_parser = subparsers.add_parser('face')
+    face_parser.add_argument('train_list', help='Path to dataset directory (ie. /tmp/COCO).')
+    face_parser.add_argument('val_list', help='Path to dataset directory (ie. /tmp/COCO).')
+    face_parser.add_argument('images_relative_path', help='Path to dataset directory (ie. /tmp/COCO).')
 
     coco_parser = subparsers.add_parser('coco')
     coco_parser.add_argument('coco_path', help='Path to dataset directory (ie. /tmp/COCO).')
