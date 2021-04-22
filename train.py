@@ -255,7 +255,7 @@ def parse_args(args):
                             help='Path to CSV file containing annotations for validation (optional).')
 
     parser.add_argument('--snapshot', help='Resume training from a snapshot.',
-                        default='/home/adam/.keras/models/ResNet-50-model.keras.h5')
+                        default='')
     parser.add_argument('--freeze-backbone', help='Freeze training of backbone layers.', action='store_true')
 
     parser.add_argument('--batch-size', help='Size of the batches.', default=1, type=int)
@@ -309,8 +309,9 @@ def main(args=None):
                                                      freeze_bn=True)
 
     # create the model
-    print('Loading model, this may take a second...')
-    model.load_weights(args.snapshot, by_name=True, skip_mismatch=True)
+    if args.snapshot:
+        print('Loading model, this may take a second...')
+        model.load_weights(args.snapshot, by_name=True, skip_mismatch=True)
 
     # freeze layers
     if args.freeze_backbone:
@@ -319,9 +320,9 @@ def main(args=None):
             model.layers[i].trainable = False
 
     # compile model
-    model.compile(optimizer=Adam(lr=1e-3), loss={'centernet_loss': lambda y_true, y_pred: y_pred})
-    # model.compile(optimizer=SGD(lr=1e-5, momentum=0.9, nesterov=True, decay=1e-5),
-    #               loss={'centernet_loss': lambda y_true, y_pred: y_pred})
+    #model.compile(optimizer=Adam(lr=1e-3), loss={'centernet_loss': lambda y_true, y_pred: y_pred})
+    model.compile(optimizer=SGD(lr=1e-4, momentum=0.5, nesterov=True, decay=1e-5),
+                   loss={'centernet_loss': lambda y_true, y_pred: y_pred})
 
     # print model summary
     # print(model.summary())

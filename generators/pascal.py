@@ -223,7 +223,7 @@ if __name__ == '__main__':
     visual_effect = VisualEffect()
 
     generator = PascalVocGenerator(
-        'datasets/VOC0712',
+        r'D:\datasets\voc_dataset',
         'trainval',
         skip_difficult=True,
         misc_effect=misc_effect,

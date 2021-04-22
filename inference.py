@@ -9,13 +9,13 @@ import os.path as osp
 
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 generator = PascalVocGenerator(
-    'datasets/VOC2007',
-    'test',
+    r'D:\datasets\voc_dataset',
+    'trainval',
     shuffle_groups=False,
     skip_truncated=False,
     skip_difficult=True,
 )
-model_path = 'checkpoints/2019-11-10/pascal_81_1.5415_3.0741_0.6860_0.7057_0.7209_0.7290.h5'
+model_path = r'C:\work\keras-CenterNet\checkpoints\2021-04-21\pascal_01_153.2941_16.5124.h5'
 num_classes = generator.num_classes()
 classes = list(generator.classes.keys())
 flip_test = True
@@ -29,7 +29,7 @@ model, prediction_model, debug_model = centernet(num_classes=num_classes,
                                                  freeze_bn=True,
                                                  score_threshold=score_threshold)
 prediction_model.load_weights(model_path, by_name=True, skip_mismatch=True)
-for i in range(10):
+for i in range(100):
     image = generator.load_image(i)
     src_image = image.copy()
 
