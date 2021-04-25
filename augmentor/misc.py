@@ -139,6 +139,8 @@ class MiscEffect:
         self.border_value = border_value
 
     def __call__(self, image, boxes):
+        if boxes.shape[0] == 0:
+            return image, boxes
         image, boxes = multi_scale(image, boxes, prob=self.multi_scale_prob)
         image, boxes = rotate(image, boxes, prob=self.rotate_prob, border_value=self.border_value)
         image, boxes = flipx(image, boxes, prob=self.flip_prob)

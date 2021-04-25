@@ -288,7 +288,7 @@ class Generator(keras.utils.Sequence):
         """
         Randomly transforms image and annotation.
         """
-        assert annotations['bboxes'].shape[0] != 0
+#        assert annotations['bboxes'].shape[0] != 0
 
         # randomly transform both image and annotations
         image, boxes = self.misc_effect(image, annotations['bboxes'])
@@ -385,9 +385,9 @@ class Generator(keras.utils.Sequence):
 
             # outputs
             bboxes = annotations['bboxes']
-            assert bboxes.shape[0] != 0
+            #assert bboxes.shape[0] != 0
             class_ids = annotations['labels']
-            assert class_ids.shape[0] != 0
+            #assert class_ids.shape[0] != 0
 
             trans_output = get_affine_transform(c, s, self.output_size)
             for i in range(bboxes.shape[0]):
